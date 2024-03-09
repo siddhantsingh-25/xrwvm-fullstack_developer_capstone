@@ -5,7 +5,6 @@ const  cors = require('cors')
 const app = express()
 const port = 3030;
 
-app.use(cors())
 app.use(require('body-parser').urlencoded({ extended: false }));
 
 const reviews_data = JSON.parse(fs.readFileSync("reviews.json", 'utf8'));
@@ -36,6 +35,18 @@ app.get('/', async (req, res) => {
     res.send("Welcome to the Mongoose API")
 });
 
+// Express route to fetch all dealerships
+app.get('/fetchDealers', async (req, res) => {
+//Write your code here
+    try {
+        const documents = await Dealerships.find();
+        res.json(documents);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching documents' });
+    }
+});
+
+app.use(cors())
 // Express route to fetch all reviews
 app.get('/fetchReviews', async (req, res) => {
   try {
@@ -56,16 +67,7 @@ app.get('/fetchReviews/dealer/:id', async (req, res) => {
   }
 });
 
-// Express route to fetch all dealerships
-app.get('/fetchDealers', async (req, res) => {
-//Write your code here
-    try {
-        const documents = await Dealerships.find();
-        res.json(documents);
-    } catch (error) {
-        res.status(500).json({ error: 'Error fetching documents' });
-    }
-});
+
 
 // Express route to fetch Dealers by a particular state
 app.get('/fetchDealers/:state', async (req, res) => {

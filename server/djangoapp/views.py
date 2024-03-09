@@ -129,16 +129,19 @@ def get_cars(request):
 # def get_dealerships(request):
 # ...
 #Update the `get_dealerships` render list of dealerships all by default, particular state if state is passed
+@csrf_exempt
 def get_dealerships(request, state="All"):
     if(state == "All"):
         endpoint = "/fetchDealers"
     else:
         endpoint = "/fetchDealers/"+state
     dealerships = get_request(endpoint)
+    print(f"Dealerships endpoint: {endpoint}, \n{dealerships}")
     return JsonResponse({"status":200,"dealers":dealerships})
 # Create a `get_dealer_reviews` view to render the reviews of a dealer
 # def get_dealer_reviews(request,dealer_id):
 # ...
+
 def get_dealer_reviews(request, dealer_id: None):
     if(dealer_id is None):
         return JsonResponse({"status": 400, "message": "Bad requesty"})

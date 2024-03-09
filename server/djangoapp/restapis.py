@@ -24,7 +24,20 @@ def get_request(endpoint, **kwargs):
     print("GET from {} ".format(request_url))
     try:
         # Call get method of requests library with URL and parameters
-        response = requests.get(request_url)
+        # response = requests.get(request_url)
+        req = requests.Request('GET', request_url)
+        prepared = req.prepare()
+
+        # Print the request URL and headers
+        print("Request URL:", prepared.url)
+        print("Request Headers:")
+        for key, value in prepared.headers.items():
+            print(f"{key}: {value}")
+
+        # Send the prepared request
+        with requests.Session() as session:
+            response = session.send(prepared)
+        # print(f"API response: {requests.get(request_url)}")
         return response.json()
     except:
         # If any error occurs
