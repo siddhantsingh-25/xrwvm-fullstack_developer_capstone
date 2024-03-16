@@ -113,6 +113,7 @@ def registration(request):
         data = {"userName":username,"error":"Already Registered"}
         return JsonResponse(data)
 
+@csrf_exempt
 def get_cars(request):
     count = CarMake.objects.filter().count()
     print(count)
@@ -144,10 +145,11 @@ def get_dealerships(request, state="All"):
 
 def get_dealer_reviews(request, dealer_id: None):
     if(dealer_id is None):
-        return JsonResponse({"status": 400, "message": "Bad requesty"})
+        return JsonResponse({"status": 400, "message": "Bad request"})
     else:
         endpoint = "/fetchReviews/dealer/"+str(dealer_id)
         reviews = get_request(endpoint)
+        print(f"Reviews received: {reviews}")
         for review_detail in reviews:
             response = analyze_review_sentiments(review_detail['review'])
             print(response)
